@@ -1,0 +1,107 @@
+<html>
+    <head>
+    <style>
+        #root {
+            background-color: grey;
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            height: 100vh;
+        }
+    </style>
+    </head>
+    <body>
+        <!-- INI KONTEN KITA -->
+        <div id="root">
+            <input type="text" placeholder="username" id="usernameInput">
+            <input type="password" placeholder="password" id="passwordInput">
+            <button onclick="onLogin()" id="loginButton">LOGIN</button>
+            <button onclick="onLogout()" id="logoutButton">LOGOUT</button>
+            <br>
+            <h1 id="admin">Login Sebagai Admin</h1>
+            <h1 id="user">Login Sebagai User</h1>
+            <h1 id="prisoner">Login Sebagai prisoner</h1>
+        </div>
+        <script type="application/javascript">
+
+            let usernameInput = document.getElementById('usernameInput')
+            let passwordInput = document.getElementById('passwordInput')
+            let loginButton = document.getElementById('loginButton')
+            let logoutButton = document.getElementById('logoutButton')
+            let admin = document.getElementById('admin')
+            let user = document.getElementById('user')
+            let prisoner = document.getElementById('prisoner')
+
+            const daftar = JSON.parse(localStorage.getItem('daftar'))
+            const pass = JSON.parse(localStorage.getItem('pass'))
+
+            admin.style.display = 'none'
+            user.style.display = 'none'
+            prisoner.style.display = 'none'
+            logoutButton.style.display = 'none'
+            
+
+
+            function onLogin() {
+                let cek = daftar.indexOf(usernameInput.value)
+                if( cek != -1) {
+                    if(passwordInput.value == pass[cek]) {
+                        localStorage.setItem("username", usernameInput.value)
+                        logoutButton.style.display = 'block'
+                        
+                        if(usernameInput.value == "admin") {
+                            localStorage.setItem("role", "admin")
+                            usernameInput.style.display = "none"
+                            passwordInput.style.display = "none"
+                            loginButton.style.display = "none"
+                            admin.style.display = 'block'
+                        } else if(usernameInput.value == "prisoner") {
+                            localStorage.setItem("role", "prisoner")
+                            usernameInput.style.display = "none"
+                            passwordInput.style.display = "none"
+                            loginButton.style.display = "none"
+                            prisoner.style.display = 'block'
+                        } else {
+                            localStorage.setItem("role", "user")
+                            usernameInput.style.display = "none"
+                            passwordInput.style.display = "none"
+                            loginButton.style.display = "none"
+                            user.style.display = 'block'
+                        }
+                    } else {
+                        alert('Password Salah')
+                    }
+                } else {
+                    alert('User Tidak Terdaftar')
+                }
+            }
+                
+
+            if(localStorage.getItem('username')) {
+                usernameInput.style.display = "none"
+                passwordInput.style.display = "none"
+                loginButton.style.display = "none"
+                logoutButton.style.display = "block"
+                if(localStorage.getItem('role') == "admin") {
+                    admin.style.display = "block"
+                } else if(localStorage.getItem('role') == "prisoner") {
+                    prisoner.style.display = "block"
+                } else {
+                    user.style.display = "block"
+                }
+            }
+
+
+            function onLogout() {
+                // localStorage.clear()
+                localStorage.removeItem("role")
+                localStorage.removeItem("username")
+                location.reload()
+            }
+        </script>
+    </body>
+</html>
+<!-- daftar
+pass
+['admin', 'prisoner', 'user']
+['admin123', 'prisoner123', 'user123'] -->
